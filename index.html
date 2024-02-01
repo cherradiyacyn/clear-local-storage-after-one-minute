@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JS clock</title>
+    <style>
+      p {
+        width: 128px;
+        margin: 3rem auto;
+        text-align: center;
+        padding: 2rem;
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <p></p>
+    <script>
+      const clockContainer = document.querySelector("p");
+
+      function launchClock() {
+        let date = new Date();
+        let hh = date.getHours();
+        let mm = date.getMinutes();
+        let ss = date.getSeconds();
+        let session = "AM";
+
+        if (hh > 12) {
+          session = "PM";
+        }
+
+        hh = hh < 10 ? "0" + hh : hh;
+        mm = mm < 10 ? "0" + mm : mm;
+        ss = ss < 10 ? "0" + ss : ss;
+
+        let time = hh + ":" + mm + ":" + ss + " " + session;
+
+        clockContainer.innerText = time;
+        let t = setTimeout(function () {
+          launchClock();
+        }, 1000);
+      }
+
+      function clearStore() {
+        const storedDate = Number(localStorage.getItem("last_visited"));
+        const date = new Date();
+        const currentDate = Number(Date.parse(date));
+
+        if (currentDate - storedDate > 60000) {
+          localStorage.clear();
+        }
+
+        let c = setTimeout(function () {
+          clearStore();
+        }, 1000);
+      }
+
+      function logClick() {
+        let date = new Date();
+        localStorage.setItem("last_visited", Date.parse(date));
+      }
+
+      clockContainer.addEventListener("click", logClick);
+
+      clearStore();
+      launchClock();
+    </script>
+  </body>
+</html>
